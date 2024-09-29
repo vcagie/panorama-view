@@ -1,0 +1,39 @@
+.container {
+    text-align: center;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.navItem {
+    font-size: 1.2rem;
+}
+
+.navItem a {
+    text-decoration: none;
+    color: #0070f3;
+    transition: color 0.3s;
+}
+
+.navItem a:hover {
+    color: #0366d6;
+}

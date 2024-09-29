@@ -1,0 +1,83 @@
+/* General layout styling */
+.pannellumContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+}
+
+.title {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+/* Responsive Pannellum viewer container */
+.panoViewer {
+    width: 100% !important;
+    max-width: 1200px !important;
+    height: 50vh !important;
+    background-color: #000 !important;
+    margin-bottom: 20px !important;
+}
+
+@media (max-width: 768px) {
+    .panoViewer {
+        height: 40vh !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .panoViewer {
+        height: 30vh !important;
+    }
+}
+
+/* Scene navigation styling */
+.sceneNavigation {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.sceneList {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.sceneButton {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sceneButton:hover {
+    background-color: #0056b3;
+}
+
+.sceneButton.active {
+    background-color: #28a745;
+}
+
+.sceneButton:focus {
+    outline: none;
+}
+
+/* Responsive button layout */
+@media (max-width: 768px) {
+    .sceneList {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

@@ -1,0 +1,33 @@
+.manageHotspotsContainer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.manageHotspotsTitle,
+.existingHotspotsTitle {
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #007bff;
+    /* Add a border to separate sections */
+    padding-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .manageHotspotsContainer {
+        padding: 15px;
+        /* Adjust padding for smaller screens */
+    }
+
+    .manageHotspotsTitle,
+    .existingHotspotsTitle {
+        font-size: 20px;
+        /* Smaller font size for smaller screens */
+    }
+}

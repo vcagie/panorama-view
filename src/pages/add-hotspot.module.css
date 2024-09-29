@@ -1,0 +1,46 @@
+.addHotspotContainer {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.backButton {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.backButton:hover {
+    background-color: #0056b3;
+}
+
+.addHotspotTitle {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.viewerContainer {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.viewerContainer canvas {
+    width: 100%;
+    height: 100%;
+}

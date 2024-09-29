@@ -1,0 +1,136 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    /* Light background for contrast */
+    border-radius: 8px;
+    /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+}
+
+.header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.uploadSection,
+.exportImportSection {
+    background: #fff;
+    /* White background for sections */
+    border: 1px solid #ddd;
+    /* Light border */
+    border-radius: 8px;
+    /* Rounded corners */
+    padding: 15px;
+    width: 100%;
+    /* Full width */
+    max-width: 600px;
+    /* Limit max width */
+    margin-bottom: 20px;
+    /* Space between sections */
+}
+
+.uploadSection input[type="file"] {
+    width: 100%;
+    /* Full width */
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    /* Border color */
+    margin-top: 10px;
+    /* Space above input */
+}
+
+.marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.hotspotLink {
+    margin: 10px 0;
+}
+
+.hotspotLink select {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    /* Border color */
+}
+
+.errorMessage {
+    color: red;
+    margin-top: 5px;
+    /* Space above error message */
+}
+
+.scenesList {
+    list-style-type: none;
+    /* Remove bullet points */
+    padding: 0;
+    /* Remove padding */
+}
+
+.scenesList li {
+    padding: 10px;
+    background: #f2f2f2;
+    /* Light gray background for list items */
+    border: 1px solid #ddd;
+    /* Border color */
+    border-radius: 4px;
+    /* Rounded corners */
+    margin: 5px 0;
+    /* Space between list items */
+    display: flex;
+    /* Flex layout for buttons */
+    justify-content: space-between;
+    /* Space between content and button */
+}
+
+.scenesList button {
+    background: #007bff;
+    /* Bootstrap primary color */
+    color: white;
+    /* White text */
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    /* Padding for buttons */
+    cursor: pointer;
+    transition: background 0.3s;
+    /* Transition for hover effect */
+}
+
+.scenesList button:hover {
+    background: #0056b3;
+    /* Darker shade on hover */
+}
+
+.exportImportSection button {
+    background: #28a745;
+    /* Success color */
+    color: white;
+    /* White text */
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    /* Padding for buttons */
+    cursor: pointer;
+    margin-right: 10px;
+    /* Space to the right */
+    transition: background 0.3s;
+    /* Transition for hover effect */
+}
+
+.exportImportSection button:hover {
+    background: #218838;
+    /* Darker shade on hover */
+}
