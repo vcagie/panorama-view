@@ -24,8 +24,15 @@ const ViewOnlyPannellum = ({ currentScene, setCurrentScene }) => {
                         }
                     });
 
+                    // Convert the object to an array of entries
+                    const sortedEntries = Object.entries(importedScenes).sort(([, a], [, b]) => a.title.localeCompare(b.title));
+
+                    // Convert the sorted entries back into an object
+                    const sortedData = Object.fromEntries(sortedEntries);
+
                     // Set the scenes and set the first scene as the current scene
-                    setScenes(importedScenes);
+                    setScenes(sortedData);
+                    setCurrentScene(Object.keys(sortedData)[0] || null); // Set the first scene as the current scene
                 } catch (error) {
                     console.error(error);
                     alert('Error importing hotspots. Please check the file format.');
