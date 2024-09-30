@@ -74,6 +74,25 @@
     outline: none;
 }
 
+.fileInput {
+    display: block;
+    /* Make file input a block element */
+    margin: 20px auto;
+    /* Center file input */
+    padding: 10px;
+    /* Padding for file input */
+    font-size: 16px;
+    /* Font size for file input */
+    border: 1px solid #ccc;
+    /* Border for file input */
+    border-radius: 5px;
+    /* Rounded corners for file input */
+    width: calc(100% - 40px);
+    /* Full width minus padding */
+    cursor: pointer;
+    /* Pointer cursor on hover */
+}
+
 /* Responsive button layout */
 @media (max-width: 768px) {
     .sceneList {
