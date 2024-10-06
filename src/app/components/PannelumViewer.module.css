@@ -34,6 +34,11 @@
     /* Space between sections */
 }
 
+.exportImportSection h3 {
+    margin: 0px 0px 8px 0px;
+}
+
+
 .uploadSection input[type="file"] {
     width: 100%;
     /* Full width */
@@ -93,6 +98,7 @@
     /* Flex layout for buttons */
     justify-content: space-between;
     /* Space between content and button */
+    gap: 8px
 }
 
 .scenesList button {
@@ -112,6 +118,20 @@
 .scenesList button:hover {
     background: #0056b3;
     /* Darker shade on hover */
+}
+
+.inputDefault {
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    color: inherit;
+    width: auto;
+    cursor: text;
+    border-bottom: 1px solid black;
 }
 
 .exportImportSection button {

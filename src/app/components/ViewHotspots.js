@@ -18,33 +18,6 @@ const ViewHotspots = ({ scenes, setScenes }) => {
 
 
     return (
-        // <div>
-        //     {Object.keys(scenes).map((sceneId, sceneIndex) => (
-        //         <div key={sceneIndex} style={{ marginBottom: '20px' }}>
-        //             {/* Display the scene title with a delete button */}
-        //             <div>
-        //                 <h3>
-        //                     {scenes[sceneId]?.title} <button onClick={() => deleteScene(sceneId)}>Delete Scene</button>
-        //                 </h3>
-        //             </div>
-
-        //             {/* List the hotspots for this scene */}
-        //             <ul>
-        //                 {scenes[sceneId]?.hotSpots.length > 0 ? (
-        //                     scenes[sceneId].hotSpots.map((hotspot, hotspotIndex) => (
-        //                         <li key={hotspotIndex}>
-        //                             Hotspot {hotspotIndex + 1}: Pitch: {hotspot.pitch}, Yaw: {hotspot.yaw}, Target Scene: {hotspot.sceneId}
-        //                             <button onClick={() => deleteHotspot(sceneId, hotspotIndex)}>Delete Hotspot</button>
-        //                         </li>
-        //                     ))
-        //                 ) : (
-        //                     <p>No hotspots available for this scene.</p>
-        //                 )}
-        //             </ul>
-        //         </div>
-        //     ))}
-        // </div>
-
         <div className={styles.hotspotContainer}>
             {Object.keys(scenes).map((sceneId, sceneIndex) => (
                 <div key={sceneIndex} className={styles.sceneSection}>
@@ -62,7 +35,8 @@ const ViewHotspots = ({ scenes, setScenes }) => {
                             scenes[sceneId].hotSpots.map((hotspot, hotspotIndex) => (
                                 <li key={hotspotIndex} className={styles.hotspotItem}>
                                     <span>
-                                        <strong>Hotspot {hotspotIndex + 1}:</strong> Pitch: {hotspot.pitch}, Yaw: {hotspot.yaw}, Target Scene: {hotspot.sceneId}
+                                        {/* <strong>Hotspot {hotspotIndex + 1}:</strong> Pitch: {hotspot.pitch}, Yaw: {hotspot.yaw}, Target Scene: {hotspot.sceneId} */}
+                                        <strong>{hotspotIndex + 1}.</strong> Link to: <strong>{hotspot.title}</strong>
                                     </span>
                                     <button className={styles.deleteBtn} onClick={() => deleteHotspot(sceneId, hotspotIndex)}>
                                         Delete Hotspot

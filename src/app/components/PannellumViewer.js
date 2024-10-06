@@ -2,6 +2,7 @@
 import { saveAs } from 'file-saver';
 import { useEffect, useRef, useState } from 'react';
 import styles from './PannelumViewer.module.css';
+import ViewHotspots from './ViewHotspots';
 
 // Temporary marker component
 const Marker = ({ position }) => (
@@ -29,6 +30,7 @@ const PannellumViewer = () => {
     const [validationError, setValidationError] = useState('');
     const [mouseDownPosition, setMouseDownPosition] = useState(null);
     const [marker, setMarker] = useState(null);
+    const [editMode, setEditMode] = useState({});
 
     useEffect(() => {
         setMarker(null)
@@ -121,9 +123,12 @@ const PannellumViewer = () => {
                     const base64String = reader.result; // Get the Base64 string
                     const sceneId = `scene${Object.keys(scenes).length + index + 1}`;
 
+                    var fileName = file?.name?.split(".")[0];
+
                     // Create a new scene configuration with the base64 image
                     newScenes[sceneId] = {
-                        title: `Scene ${Object.keys(scenes).length + index + 1}`,
+                        // title: `Scene ${Object.keys(scenes).length + index + 1}`,
+                        title: fileName,
                         type: 'equirectangular',
                         panorama: base64String, // Store the Base64 string here
                         hotSpots: [],
@@ -200,6 +205,7 @@ const PannellumViewer = () => {
                         type: 'scene',
                         text: `Go to ${targetSceneId}`,
                         sceneId: targetSceneId, // Link to the selected scene
+                        title: scenes[targetSceneId]?.title
                     }];
 
                     // Update the current scene's hotSpots with the new array
@@ -320,8 +326,14 @@ const PannellumViewer = () => {
                         }
                     });
 
-                    // If all scenes are valid, set the scenes
-                    setScenes(importedScenes);
+                    // Convert the object to an array of entries
+                    const sortedEntries = Object.entries(importedScenes).sort(([, a], [, b]) => a.title.localeCompare(b.title));
+
+                    // Convert the sorted entries back into an object
+                    const sortedData = Object.fromEntries(sortedEntries);
+
+                    setScenes(sortedData);
+                    setCurrentScene(Object.keys(sortedData)[0] || null); // Set the first scene as the current scene
                     alert('Hotspots imported successfully!');
                 } catch (error) {
                     console.error(error);
@@ -332,9 +344,31 @@ const PannellumViewer = () => {
         }
     };
 
+    // Handle title change
+    const handleTitleChange = (e, sceneId) => {
+        scenes[sceneId].title = e.target.value;
+
+        for (const scene in scenes) {
+            const curr = scenes[scene];
+            if (curr && curr.hotSpots && curr.hotSpots.length >= 1) {
+                curr.hotSpots.forEach(q => {
+                    if (q.sceneId === sceneId) {
+                        q.title = e.target.value
+                    }
+                });
+            }
+        }
+
+        setScenes({ ...scenes })
+    };
 
     return (
         <div className={styles.container}>
+            <div className={styles.exportImportSection}>
+                <h3>Import Hotspots:</h3>
+                <input type="file" accept="application/json" onChange={importHotspots} />
+            </div>
+
             <div className={styles.header}>Upload Images for New Scenes</div>
             <div className={styles.uploadSection}>
                 <input
@@ -381,21 +415,33 @@ const PannellumViewer = () => {
                     </div>
                 )
             }
+
             <div>
                 <h3>Current Scenes:</h3>
                 <ul className={styles.scenesList}>
                     {Object.keys(scenes).map((sceneId) => (
                         <li key={sceneId}>
-                            {scenes[sceneId].title}
+                            <input
+                                type="text"
+                                value={scenes[sceneId].title}
+                                onChange={(e) => handleTitleChange(e, sceneId)}
+                                className={`${styles.inputDefault} ${styles.inputEdit}`}
+                            />
                             <button onClick={() => setCurrentScene(sceneId)}>View Scene</button>
                         </li>
                     ))}
                 </ul>
             </div>
+
+            <h1 className={styles.existingHotspotsTitle}>View Existing Hotspots</h1>
+            <ViewHotspots
+                scenes={scenes}
+                setScenes={setScenes} // Pass setScenes to allow hotspot removal
+            />
+
             <div className={styles.exportImportSection}>
-                <h3>Export/Import Hotspots:</h3>
+                <h3>Export</h3>
                 <button onClick={exportHotspots}>Export Hotspots</button>
-                <input type="file" accept="application/json" onChange={importHotspots} />
             </div>
         </div>
     );

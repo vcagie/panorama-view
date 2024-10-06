@@ -18,7 +18,7 @@ const Dashboard = () => {
                 <ul className={styles.navList}>
                     <li className={styles.navItem}><Link href="/add-hotspot">Add New Hotspot</Link></li>
                     <li className={styles.navItem}><Link href="/view-hotspots">View Existing Hotspots</Link></li>
-                    <li className={styles.navItem}><Link href="/manage-hotspots">Manage Hotspots</Link></li>
+                    {/* <li className={styles.navItem}><Link href="/manage-hotspots">Manage Hotspots</Link></li> */}
                 </ul>
             </nav>
         </div>

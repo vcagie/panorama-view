@@ -20,8 +20,9 @@
 .navList {
     list-style: none;
     padding: 0;
-    display: flex;
+    /* display: flex; */
     gap: 15px;
+    text-align: start;
 }
 
 .navItem {
