@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './PannelumViewer.module.css';
 import ViewHotspots from './ViewHotspots';
 
-// Temporary marker component
 const Marker = ({ position }) => (
     <div
         style={{
@@ -30,7 +29,17 @@ const PannellumViewer = () => {
     const [validationError, setValidationError] = useState('');
     const [mouseDownPosition, setMouseDownPosition] = useState(null);
     const [marker, setMarker] = useState(null);
-    const [editMode, setEditMode] = useState({});
+    const [isIOS, setIsIOS] = useState(false); // State to track if the device is iOS
+    const [isFullscreen, setIsFullscreen] = useState(false); // Track if fullscreen is active
+    const originalStyle = useRef({}); // To store original styles for iOS full screen toggle
+
+    // Detect if the user is on iOS, but only on the client side
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            setIsIOS(/iPhone/.test(userAgent));
+        }
+    }, []);
 
     useEffect(() => {
         setMarker(null)
@@ -76,39 +85,6 @@ const PannellumViewer = () => {
             cleanupViewer();
         };
     }, [scenes, currentScene]);
-
-    // // Function to handle image upload
-    // const handleImageUpload = (event) => {
-    //     const files = event.target.files;
-    //     if (!files || files.length === 0) return;
-
-    //     const newScenes = {};
-    //     // Loop through all selected files and create scenes
-    //     Array.from(files).forEach((file, index) => {
-    //         // Create a URL for the uploaded image
-    //         const imageUrl = URL.createObjectURL(file);
-    //         const sceneId = `scene${Object.keys(scenes).length + index + 1}`;
-
-    //         // Create a new scene configuration
-    //         newScenes[sceneId] = {
-    //             title: `Scene ${Object.keys(scenes).length + index + 1}`,
-    //             type: 'equirectangular',
-    //             panorama: imageUrl,
-    //             hotSpots: [],
-    //             autoLoad: true, // Ensure auto loading for this scene
-    //         };
-    //     });
-
-    //     // Add new scenes to the existing scenes state
-    //     setScenes((prevScenes) => ({
-    //         ...prevScenes,
-    //         ...newScenes,
-    //     }));
-
-    //     // Automatically set the first new scene as the current scene to view it
-    //     const firstNewSceneId = `scene${Object.keys(scenes).length + 1}`;
-    //     setCurrentScene(firstNewSceneId);
-    // };
 
     // Function to handle image upload
     const handleImageUpload = (event) => {
@@ -203,7 +179,7 @@ const PannellumViewer = () => {
                         pitch,
                         yaw,
                         type: 'scene',
-                        text: `Go to ${targetSceneId}`,
+                        text: `Go to ${scenes[targetSceneId]?.title}`,
                         sceneId: targetSceneId, // Link to the selected scene
                         title: scenes[targetSceneId]?.title
                     }];
@@ -240,13 +216,22 @@ const PannellumViewer = () => {
 
     // Handle mouse down event
     const handleMouseDown = (event) => {
-        setMarker(null);
+        // Check if the click is on the Pannellum control buttons
+        if (event.target.closest('.pnlm-controls-container')) {
+            return;
+        }
 
+        setMarker(null);
         setMouseDownPosition({ x: event.clientX, y: event.clientY });
     };
 
     // Handle mouse up event
     const handleMouseUp = (event) => {
+        // Check if the click is on the Pannellum control buttons
+        if (event.target.closest('.pnlm-controls-container')) {
+            return;
+        }
+
         if (mouseDownPosition) {
             const distance = Math.sqrt(
                 (event.clientX - mouseDownPosition.x) ** 2 +
@@ -294,22 +279,6 @@ const PannellumViewer = () => {
         saveAs(blob, 'hotspots.json');
     };
 
-    // const importHotspots = (event) => {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = (e) => {
-    //             try {
-    //                 const importedScenes = JSON.parse(e.target.result);
-    //                 setScenes(importedScenes);
-    //                 alert('Hotspots imported successfully!');
-    //             } catch (error) {
-    //                 alert('Error importing hotspots. Please check the file format.');
-    //             }
-    //         };
-    //         reader.readAsText(file);
-    //     }
-    // };
     const importHotspots = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -354,12 +323,75 @@ const PannellumViewer = () => {
                 curr.hotSpots.forEach(q => {
                     if (q.sceneId === sceneId) {
                         q.title = e.target.value
+                        q.text = `Go to ${e.target.value}`
                     }
                 });
             }
         }
 
         setScenes({ ...scenes })
+    };
+
+    const toggleFullscreen = () => {
+        if (!isFullscreen) {
+            if (isIOS) {
+                // Save the original styles
+                originalStyle.current = {
+                    position: pannellumRef.current.style.position,
+                    top: pannellumRef.current.style.top,
+                    left: pannellumRef.current.style.left,
+                    width: pannellumRef.current.style.width,
+                    height: pannellumRef.current.style.height,
+                    zIndex: pannellumRef.current.style.zIndex,
+                };
+
+                // Make the viewer full screen on iOS
+                pannellumRef.current.style.position = 'fixed';
+                pannellumRef.current.style.top = 0;
+                pannellumRef.current.style.left = 0;
+                pannellumRef.current.style.width = `${window.innerWidth}px`;
+                pannellumRef.current.style.height = `${window.innerHeight}px`;
+                // pannellumRef.current.style.width = '100vw';
+                // pannellumRef.current.style.height = '100vh';
+                pannellumRef.current.style.zIndex = 9999; // Bring it to the front
+            }
+            //  else {
+            //     // Use the fullscreen API for other devices
+            //     if (pannellumRef.current.requestFullscreen) {
+            //         pannellumRef.current.requestFullscreen();
+            //     } else if (pannellumRef.current.mozRequestFullScreen) { // Firefox
+            //         pannellumRef.current.mozRequestFullScreen();
+            //     } else if (pannellumRef.current.webkitRequestFullscreen) { // Chrome, Safari, Opera
+            //         pannellumRef.current.webkitRequestFullscreen();
+            //     } else if (pannellumRef.current.msRequestFullscreen) { // IE/Edge
+            //         pannellumRef.current.msRequestFullscreen();
+            //     }
+            // }
+            setIsFullscreen(true);
+        } else {
+            if (isIOS) {
+                // Restore the original styles on iOS
+                pannellumRef.current.style.position = originalStyle.current.position;
+                pannellumRef.current.style.top = originalStyle.current.top;
+                pannellumRef.current.style.left = originalStyle.current.left;
+                pannellumRef.current.style.width = originalStyle.current.width;
+                pannellumRef.current.style.height = originalStyle.current.height;
+                pannellumRef.current.style.zIndex = originalStyle.current.zIndex;
+            }
+            //  else {
+            //     // Exit fullscreen for other devices
+            //     if (document.exitFullscreen) {
+            //         document.exitFullscreen();
+            //     } else if (document.mozCancelFullScreen) { // Firefox
+            //         document.mozCancelFullScreen();
+            //     } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+            //         document.webkitExitFullscreen();
+            //     } else if (document.msExitFullscreen) { // IE/Edge
+            //         document.msExitFullscreen();
+            //     }
+            // }
+            setIsFullscreen(false);
+        }
     };
 
     return (
@@ -389,6 +421,15 @@ const PannellumViewer = () => {
                 {marker && (
                     <Marker className={styles.marker} position={marker} />
                 )}
+
+                {/* Custom Fullscreen Button */}
+                {
+                    isIOS && scenes && Object.keys(scenes).length > 0 &&
+                    <button onClick={toggleFullscreen} className={`${styles.fullScreenButtonDefault} ${isFullscreen ? styles.fullScreenButtonAfter : styles.fullScreenButtonBefore}`}>
+                        {isFullscreen ? '[•]' : '[ ]'}
+                    </button>
+                }
+
             </div>
             {
                 hotspotData && (
