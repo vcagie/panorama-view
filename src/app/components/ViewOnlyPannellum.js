@@ -1,5 +1,7 @@
 "use client"; // Marks the component as a Client Component
 import { useEffect, useRef, useState } from 'react';
+import ButtonScene from './ButtonScene';
+import FileUpload from './FileUpload';
 import styles from './ViewOnlyPannellum.module.css';
 
 // const ViewOnlyPannellum = ({ scenes, currentScene, setCurrentScene }) => {
@@ -76,23 +78,16 @@ const ViewOnlyPannellum = ({ currentScene, setCurrentScene }) => {
 
     return (
         <div className={styles.pannellumContainer}>
-            <h1 className={styles.title}>View-Only Panorama</h1>
-            <input className={styles.fileInput} type="file" accept="application/json" onChange={importHotspots} />
-
-            <div id="pano" className={styles.panoViewer}></div>
+            <FileUpload
+                placeholder={"Import file"}
+                className={styles.fileInput}
+                onChange={importHotspots}
+            />
 
             {Object.keys(scenes).length > 0 && (
-                <div className={styles.sceneNavigation}>
-                    <h2>Select Scene:</h2>
-                    <ul className={styles.sceneList}>
-                        {Object.keys(scenes).map(sceneId => (
-                            <li key={sceneId}>
-                                <button className={`${styles.sceneButton} ${currentScene === sceneId ? styles.active : ""}`} onClick={() => setCurrentScene(sceneId)}>
-                                    {scenes[sceneId].title}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                <div className={styles.viewContainer}>
+                    <ButtonScene scenes={scenes} setCurrentScene={setCurrentScene} />
+                    <div id="pano" className={styles.panoViewer}></div>
                 </div>
             )}
         </div>

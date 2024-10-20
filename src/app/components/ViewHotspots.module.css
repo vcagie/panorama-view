@@ -1,10 +1,6 @@
 /* Container styling */
 .hotspotContainer {
-    padding: 20px;
-    max-width: 1000px;
     margin: 0 auto;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
 }
 
 /* Scene section styling */
@@ -81,4 +77,19 @@
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+.inputDefault {
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    color: inherit;
+    width: auto;
+    cursor: text;
+    /* border-bottom: 1px solid rgb(131, 128, 128); */
+    flex-grow: 1;
 }

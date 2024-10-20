@@ -3,18 +3,6 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #f9f9f9;
-    /* Light background for contrast */
-    border-radius: 8px;
-    /* Rounded corners */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow */
-}
-
-.header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
 }
 
 .uploadSection,
@@ -38,18 +26,6 @@
     margin: 0px 0px 8px 0px;
 }
 
-
-.uploadSection input[type="file"] {
-    width: 100%;
-    /* Full width */
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    /* Border color */
-    margin-top: 10px;
-    /* Space above input */
-}
-
 .marker {
     position: absolute;
     width: 20px;
@@ -61,14 +37,55 @@
 }
 
 .hotspotLink {
+    width: 100%;
     margin: 10px 0;
+    display: flex;
+    gap: 40px;
 }
 
-.hotspotLink select {
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    /* Border color */
+.hotspotLink p {
+    font-size: 13px;
+}
+
+.selectBox {
+    width: 350px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.selectBox select {
+    appearance: none;
+    width: 100%;
+    font-size: 13px;
+    padding: 12px;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 8px;
+    color: #000;
+    cursor: pointer;
+}
+
+.selectBox::before,
+.selectBox::after {
+    --size: 0.3rem;
+    content: "";
+    position: absolute;
+    right: 1rem;
+    pointer-events: none;
+}
+
+.selectBox::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid black;
+    top: 40%;
+}
+
+.selectBox::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid black;
+    top: 55%;
 }
 
 .errorMessage {
@@ -174,4 +191,33 @@
 .fullScreenButtonAfter {
     position: fixed;
     padding: 7px;
+}
+
+.viewContainer,
+.manageScenes {
+    width: 100%;
+}
+
+.panoViewer {
+    position: relative;
+    width: 100% !important;
+    max-width: 1200px !important;
+    height: 50vh !important;
+    margin-bottom: 20px !important;
+}
+
+@media (max-width: 768px) {
+    .panoViewer {
+        height: 40vh !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .panoViewer {
+        height: 30vh !important;
+    }
+}
+
+.fileInput {
+    margin-bottom: 20px;
 }

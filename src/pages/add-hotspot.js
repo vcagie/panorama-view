@@ -1,4 +1,5 @@
 "use client";
+import Button from "@/app/components/Button";
 import PannellumViewer from "@/app/components/PannellumViewer";
 import { useRouter } from "next/router";
 import 'pannellum/build/pannellum.css';
@@ -15,11 +16,11 @@ const AddHotspotPage = () => {
     }, []);
     return (
         <div className={styles.addHotspotContainer}>
-            <button className={styles.backButton} onClick={() => router.push('/')}>Back to Dashboard</button>
-            <h1 className={styles.addHotspotTitle}>Add New Hotspot</h1>
-            <div className={styles.viewerContainer}>
-                <PannellumViewer />
-            </div>
+            <Button iconPosition='left' onClick={() => router.push('/')}>
+                Back
+            </Button>
+            <h1 className={styles.addHotspotTitle}>ADD NEW TOUR</h1>
+            <PannellumViewer />
         </div>
     );
 };

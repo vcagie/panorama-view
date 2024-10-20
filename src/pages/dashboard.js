@@ -1,4 +1,5 @@
 "use client";
+import Button from '@/app/components/Button';
 import Link from 'next/link';
 import 'pannellum/build/pannellum.css';
 import { useEffect } from 'react';
@@ -13,11 +14,23 @@ const Dashboard = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Virtual Tour Dashboard</h1>
+            <h1 className={styles.title}>Virtual Tour</h1>
             <nav className={styles.nav}>
                 <ul className={styles.navList}>
-                    <li className={styles.navItem}><Link href="/add-hotspot">Add New Hotspot</Link></li>
-                    <li className={styles.navItem}><Link href="/view-hotspots">View Existing Hotspots</Link></li>
+                    <li className={styles.navItem}>
+                        <Link href="/add-hotspot">
+                            <Button>
+                                Add New Tour
+                            </Button>
+                        </Link>
+                    </li>
+                    <li className={styles.navItem}>
+                        <Link href="/view-hotspots">
+                            <Button>
+                                View Tour
+                            </Button>
+                        </Link>
+                    </li>
                     {/* <li className={styles.navItem}><Link href="/manage-hotspots">Manage Hotspots</Link></li> */}
                 </ul>
             </nav>

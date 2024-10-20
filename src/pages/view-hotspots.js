@@ -1,4 +1,5 @@
 "use client";
+import Button from '@/app/components/Button';
 import ViewOnlyPannellum from '@/app/components/ViewOnlyPannellum';
 import { useRouter } from 'next/router';
 import 'pannellum/build/pannellum.css';
@@ -23,8 +24,10 @@ const ViewHotspotsPage = () => {
 
     return (
         <div className={styles.viewHotspotsContainer}>
-            <button className={styles.backButton} onClick={() => router.push('/')}>Back to Dashboard</button>
-            <h1 className={styles.viewTitle}>View Scene</h1>
+            <Button iconPosition='left' onClick={() => router.push('/')}>
+                Back
+            </Button>
+            <h1 className={styles.viewTitle}>VIEW TOUR</h1>
             <ViewOnlyPannellum
                 scenes={scenes}
                 setCurrentScene={setCurrentScene}

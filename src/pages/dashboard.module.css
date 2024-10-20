@@ -4,17 +4,54 @@
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    gap: 16px;
 }
 
 .title {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 0;
+    padding-bottom: 5px;
+    position: relative;
+    margin: 0;
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    color: #080808;
+    -webkit-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+    margin-bottom: 16px;
 }
+
+.title:before {
+    width: 28px;
+    height: 5px;
+    display: block;
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    margin-left: -14px;
+    background-color: #b80000;
+}
+
+.title:after {
+    width: 100px;
+    height: 1px;
+    display: block;
+    content: "";
+    position: relative;
+    margin-top: 25px;
+    left: 50%;
+    margin-left: -50px;
+    background-color: #b80000;
+}
+
 
 .nav {
     display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+    justify-content: start;
 }
 
 .navList {
@@ -25,16 +62,20 @@
     text-align: start;
 }
 
-.navItem {
-    font-size: 1.2rem;
+.navList li {
+    margin: 15px 0;
 }
 
-.navItem a {
-    text-decoration: none;
-    color: #0070f3;
-    transition: color 0.3s;
-}
+@keyframes shine {
+    0% {
+        left: -100px;
+    }
 
-.navItem a:hover {
-    color: #0366d6;
+    60% {
+        left: 100%;
+    }
+
+    to {
+        left: 100%;
+    }
 }

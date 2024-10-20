@@ -1,6 +1,9 @@
 "use client"; // Marks the component as a Client Component
 import { saveAs } from 'file-saver';
 import { useEffect, useRef, useState } from 'react';
+import Button from './Button';
+import ButtonScene from './ButtonScene';
+import FileUpload from './FileUpload';
 import styles from './PannelumViewer.module.css';
 import ViewHotspots from './ViewHotspots';
 
@@ -19,6 +22,18 @@ const Marker = ({ position }) => (
         }}
     />
 );
+
+const debounce = (fn, delay) => {
+    let timeout = -1;
+
+    return (...args) => {
+        if (timeout !== -1) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(fn, delay, ...args);
+    };
+};
 
 const PannellumViewer = () => {
     const pannellumRef = useRef(null);
@@ -303,7 +318,7 @@ const PannellumViewer = () => {
 
                     setScenes(sortedData);
                     setCurrentScene(Object.keys(sortedData)[0] || null); // Set the first scene as the current scene
-                    alert('Hotspots imported successfully!');
+                    // alert('Hotspots imported successfully!');
                 } catch (error) {
                     console.error(error);
                     alert('Error importing hotspots. Please check the file format.');
@@ -314,23 +329,23 @@ const PannellumViewer = () => {
     };
 
     // Handle title change
-    const handleTitleChange = (e, sceneId) => {
-        scenes[sceneId].title = e.target.value;
+    const handleTitleChange = debounce((value, sceneId) => {
+        scenes[sceneId].title = value;
 
         for (const scene in scenes) {
             const curr = scenes[scene];
             if (curr && curr.hotSpots && curr.hotSpots.length >= 1) {
                 curr.hotSpots.forEach(q => {
                     if (q.sceneId === sceneId) {
-                        q.title = e.target.value
-                        q.text = `Go to ${e.target.value}`
+                        q.title = value
+                        q.text = `Go to ${value}`
                     }
                 });
             }
         }
 
         setScenes({ ...scenes })
-    };
+    }, 300);
 
     const toggleFullscreen = () => {
         if (!isFullscreen) {
@@ -396,94 +411,101 @@ const PannellumViewer = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.exportImportSection}>
-                <h3>Import Hotspots:</h3>
-                <input type="file" accept="application/json" onChange={importHotspots} />
-            </div>
-
-            <div className={styles.header}>Upload Images for New Scenes</div>
-            <div className={styles.uploadSection}>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    multiple // Allow multiple file selection
-                />
-            </div>
-            <div style={{ width: '100%', height: '500px', position: "relative" }}>
-                <div
-                    ref={pannellumRef}
-                    style={{ width: '100%', height: '100%' }}
-                    onMouseDown={handleMouseDown}
-                    onMouseUp={handleMouseUp}
-                >
+            <div style={{ display: "flex", gap: 40 }}>
+                <div style={{ textAlign: 'center' }}>
+                    <p style={{ marginBottom: 8 }}>Import saved file</p>
+                    <FileUpload
+                        placeholder={"Import file"}
+                        className={styles.fileInput}
+                        onChange={importHotspots}
+                    />
                 </div>
-                {marker && (
-                    <Marker className={styles.marker} position={marker} />
+                <div style={{ textAlign: 'center' }}>
+                    <p style={{ marginBottom: 8 }}>Upload new Images</p>
+                    <FileUpload
+                        id={"multiple-file"}
+                        placeholder={"Choose Image(s)"}
+                        className={styles.fileInput}
+                        onChange={handleImageUpload}
+                        accept="image/*"
+                        isMultiple
+                    />
+                </div>
+                {Object.keys(scenes).length > 0 && (
+                    <div style={{ textAlign: 'center' }}>
+                        <p style={{ marginBottom: 8 }}>Save and Export</p>
+                        <Button onClick={exportHotspots} useIcon={false}>Save and Export</Button>
+                    </div>
                 )}
+            </div>
 
-                {/* Custom Fullscreen Button */}
-                {
-                    isIOS && scenes && Object.keys(scenes).length > 0 &&
-                    <button onClick={toggleFullscreen} className={`${styles.fullScreenButtonDefault} ${isFullscreen ? styles.fullScreenButtonAfter : styles.fullScreenButtonBefore}`}>
-                        {isFullscreen ? '[•]' : '[ ]'}
-                    </button>
-                }
+            <div className={styles.viewContainer}>
+                <ButtonScene scenes={scenes} setCurrentScene={setCurrentScene} />
+                <div className={styles.panoViewer} >
+                    <div
+                        ref={pannellumRef}
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={handleMouseUp}
+                    >
+                    </div>
+                    {marker && (
+                        <Marker className={styles.marker} position={marker} />
+                    )}
 
+                    {/* Custom Fullscreen Button */}
+                    {
+                        isIOS && scenes && Object.keys(scenes).length > 0 &&
+                        <button onClick={toggleFullscreen} className={`${styles.fullScreenButtonDefault} ${isFullscreen ? styles.fullScreenButtonAfter : styles.fullScreenButtonBefore}`}>
+                            {isFullscreen ? '[•]' : '[ ]'}
+                        </button>
+                    }
+
+                </div>
             </div>
             {
                 hotspotData && (
                     <div className={styles.hotspotLink}>
-                        <h3>Link Hotspot to Scene</h3>
-                        <p>Select a scene to link this hotspot to:</p>
-                        <select
-                            onChange={(e) => {
-                                const targetSceneId = e.target.value;
-                                if (targetSceneId) {
-                                    addHotspot(hotspotData.pitch, hotspotData.yaw, targetSceneId);
-                                }
-                            }}
-                        >
-                            <option value="">Select a Scene</option>
-                            {/* Filter out scenes already used as hotspots in the current scene */}
-                            {getAvailableScenesForHotspot().map((sceneId) => (
-                                <option key={sceneId} value={sceneId}>
-                                    {scenes[sceneId].title}
-                                </option>
-                            ))}
-                        </select>
+                        <div>
+                            <h3>Link to a Scene</h3>
+                            <p>Select a scene to link this marker to:</p>
+                        </div>
+                        <div className={styles.selectBox}>
+                            <select
+                                onChange={(e) => {
+                                    const targetSceneId = e.target.value;
+                                    if (targetSceneId) {
+                                        addHotspot(hotspotData.pitch, hotspotData.yaw, targetSceneId);
+                                    }
+                                }}
+                            >
+                                <option value="">Select a Scene</option>
+                                {/* Filter out scenes already used as hotspots in the current scene */}
+                                {getAvailableScenesForHotspot().map((sceneId) => (
+                                    <option key={sceneId} value={sceneId}>
+                                        {scenes[sceneId].title}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         {validationError && <p className={styles.errorMessage}>{validationError}</p>}
                     </div>
                 )
             }
 
-            <div>
-                <h3>Current Scenes:</h3>
-                <ul className={styles.scenesList}>
-                    {Object.keys(scenes).map((sceneId) => (
-                        <li key={sceneId}>
-                            <input
-                                type="text"
-                                value={scenes[sceneId].title}
-                                onChange={(e) => handleTitleChange(e, sceneId)}
-                                className={`${styles.inputDefault} ${styles.inputEdit}`}
-                            />
-                            <button onClick={() => setCurrentScene(sceneId)}>View Scene</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
-            <h1 className={styles.existingHotspotsTitle}>View Existing Hotspots</h1>
-            <ViewHotspots
-                scenes={scenes}
-                setScenes={setScenes} // Pass setScenes to allow hotspot removal
-            />
-
-            <div className={styles.exportImportSection}>
+            {Object.keys(scenes).length > 0 && (
+                <div className={styles.manageScenes}>
+                    <h2>Manage Scenes</h2>
+                    <ViewHotspots
+                        scenes={scenes}
+                        setScenes={setScenes}
+                        handleTitleChange={handleTitleChange}
+                    />
+                </div>
+            )}
+            {/* <div className={styles.exportImportSection}>
                 <h3>Export</h3>
                 <button onClick={exportHotspots}>Export Hotspots</button>
-            </div>
+            </div> */}
         </div>
     );
 };

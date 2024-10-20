@@ -1,7 +1,20 @@
 "use client";
-import styles from './ViewHotspots.module.css'; // Import the CSS file
+import { useCallback, useEffect, useState } from 'react';
+import styles from './ViewHotspots.module.css';
 
-const ViewHotspots = ({ scenes, setScenes }) => {
+const ViewHotspots = ({ scenes, setScenes, handleTitleChange }) => {
+    const [titleList, setTitleList] = useState({});
+
+    useEffect(() => {
+        const allTitle = {}
+        if (Object.keys(scenes).length > 0) {
+            Object.keys(scenes).map((sceneId) => {
+                allTitle[sceneId] = scenes[sceneId].title;
+            })
+        }
+        setTitleList(allTitle)
+    }, [scenes])
+
     // Function to delete a specific hotspot
     const deleteHotspot = (sceneId, hotspotIndex) => {
         const updatedScenes = { ...scenes };
@@ -16,6 +29,11 @@ const ViewHotspots = ({ scenes, setScenes }) => {
         setScenes(updatedScenes); // Update the scenes state
     };
 
+    const handleChangeTitle = useCallback((e, sceneId) => {
+        titleList[sceneId] = e.target.value;
+        setTitleList({ ...titleList });
+        handleTitleChange(e.target.value, sceneId)
+    }, []);
 
     return (
         <div className={styles.hotspotContainer}>
@@ -23,9 +41,15 @@ const ViewHotspots = ({ scenes, setScenes }) => {
                 <div key={sceneIndex} className={styles.sceneSection}>
                     {/* Display the scene title with a delete button */}
                     <div className={styles.sceneHeader}>
-                        <h3>{scenes[sceneId]?.title}</h3>
+                        <input
+                            type="text"
+
+                            value={titleList[sceneId]}
+                            onChange={(e) => handleChangeTitle(e, sceneId)}
+                            className={`${styles.inputDefault} ${styles.inputEdit}`}
+                        />
                         <button className={styles.deleteBtn} onClick={() => deleteScene(sceneId)}>
-                            Delete Scene
+                            Remove Scene
                         </button>
                     </div>
 
@@ -39,12 +63,12 @@ const ViewHotspots = ({ scenes, setScenes }) => {
                                         <strong>{hotspotIndex + 1}.</strong> Link to: <strong>{hotspot.title}</strong>
                                     </span>
                                     <button className={styles.deleteBtn} onClick={() => deleteHotspot(sceneId, hotspotIndex)}>
-                                        Delete Hotspot
+                                        Remove Link
                                     </button>
                                 </li>
                             ))
                         ) : (
-                            <p className={styles.noHotspot}>No hotspots available for this scene.</p>
+                            <p className={styles.noHotspot}>No link available for this scene.</p>
                         )}
                     </ul>
                 </div>
