@@ -1,6 +1,6 @@
 import styles from './Button.module.css';
 
-const Button = ({ children, onClick, useIcon = true, iconPosition = 'right', colorId = 2 }) => {
+const Button = ({ children, onClick, useIcon = true, iconPosition = 'right', colorId = 2, style }) => {
     const getColor = () => {
         switch (colorId) {
             case 1:
@@ -18,7 +18,7 @@ const Button = ({ children, onClick, useIcon = true, iconPosition = 'right', col
     }
 
     return (
-        <button className={`${styles.button} ${getColor().button}`} onClick={onClick}>
+        <button className={`${styles.button} ${getColor().button}`} onClick={onClick} style={style}>
             {useIcon && iconPosition === "left" && (
                 <svg fill="currentColor" viewBox="0 0 24 24" className={`${styles.icon} ${styles.iconleft} ${getColor().icon}`}>
                     <path

@@ -47,6 +47,18 @@
     font-size: 13px;
 }
 
+@media (max-width: 768px) {
+    .hotspotLink {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .hotspotLink div {
+        flex-grow: 1;
+    }
+}
+
 .selectBox {
     width: 350px;
     position: relative;
@@ -220,4 +232,24 @@
 
 .fileInput {
     margin-bottom: 20px;
+}
+
+.headerButton {
+    display: flex;
+    gap: 40;
+}
+
+@media (max-width: 768px) {
+    .headerButton {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .headerButton div {
+        flex-grow: 1;
+    }
+}
+
+.textCenter {
+    text-align: center;
 }

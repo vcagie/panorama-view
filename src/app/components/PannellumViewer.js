@@ -411,7 +411,7 @@ const PannellumViewer = () => {
 
     return (
         <div className={styles.container}>
-            <div style={{ display: "flex", gap: 40 }}>
+            <div className={styles.headerButton}>
                 <div style={{ textAlign: 'center' }}>
                     <p style={{ marginBottom: 8 }}>Import saved file</p>
                     <FileUpload
@@ -434,7 +434,7 @@ const PannellumViewer = () => {
                 {Object.keys(scenes).length > 0 && (
                     <div style={{ textAlign: 'center' }}>
                         <p style={{ marginBottom: 8 }}>Save and Export</p>
-                        <Button onClick={exportHotspots} useIcon={false}>Save and Export</Button>
+                        <Button onClick={exportHotspots} useIcon={false} style={{ margin: "auto" }}>Save and Export</Button>
                     </div>
                 )}
             </div>
